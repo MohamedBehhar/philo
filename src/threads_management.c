@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   threads_management.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/11 12:18:03 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/15 12:49:57 by mbehhar          ###   ########.fr       */
+/*   Created: 2022/02/15 12:53:04 by mbehhar           #+#    #+#             */
+/*   Updated: 2022/02/15 16:22:16 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int main(int ac, char **av)
+void	*routine(void *arg)
 {
-	t_data data;
+	int i = *(int*)arg;
+	printf("hello: %d\n", i);
+	return (0);
+}
 
-	if (ac != 5 && ac != 6)
-		put_error("Insufficient Arguments\n");
-	ft_init_data(&data, av, ac);
+int create_threads(t_data *data)
+{
+	int i;
 
+	i = 0;
+	while (i < data->nbr_philo)
+	{
+		if (pthread_create(&data->philo[i].thread_id, NULL, &routine, &data->philo[i].id) != 0)
+			return (PHTREAD_ERR);
+		i++;
+	}
+	return (0);
 }

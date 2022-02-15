@@ -9,6 +9,8 @@ OBJS		=	$(SRCS:%.c=%.o)
 SRCS		= ./src/error.c \
 				./src/init_data.c \
 				./src/utils.c \
+				./src/time_management.c \
+				./src/threads_management.c \
 
 MAIN 		= 	./src/main.c \
 

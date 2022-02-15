@@ -1,23 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   time_management.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/11 12:18:03 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/15 12:49:57 by mbehhar          ###   ########.fr       */
+/*   Created: 2022/02/15 11:57:09 by mbehhar           #+#    #+#             */
+/*   Updated: 2022/02/15 12:07:32 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int main(int ac, char **av)
+long long	timestamp(void)
 {
-	t_data data;
+	struct timeval	t;
 
-	if (ac != 5 && ac != 6)
-		put_error("Insufficient Arguments\n");
-	ft_init_data(&data, av, ac);
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+}
 
+long long	time_diff(long long past, long long current)
+{
+	return (current - past);
+}
+
+void		smart_sleep(long long time, t_data *data)
+{
+	long long i;
+
+	i = timestamp();
+	while (!(data->dieded))
+	{
+		if (time_diff(i, timestamp()) >= time)
+			break ;
+		usleep(50);
+	}
 }

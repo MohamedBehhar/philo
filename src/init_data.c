@@ -6,43 +6,26 @@
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 12:34:06 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/14 18:34:22 by mbehhar          ###   ########.fr       */
+/*   Updated: 2022/02/15 16:08:49 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	*routine(void *arg){
-	int i;
-	i = *(int*)arg;
-	printf("%d Thread Created\n", i);
-	fflush(stdout);
-	// lock(fork[philo->id]);
-	// lock(fork[philo->id + 1 % philo->data->nbr_philos]);
-	usleep(10000);
-	// free(arg);
-	return NULL;
-}
-
-void	create_threads(t_data *data)
+int	ft_init_mutex(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->nbr_philo)
 	{
-		// usleep(100);
-		// puts("here\n");
-		pthread_create(&data->philo[i].ph_thread, NULL, &routine, &i);
+		if (pthread_mutex_init(&data->fork_mutex[i], NULL) != 0)
+			return (MUTEX_ERR);
 		i++;
 	}
-	i = 0;
-	while (i < data->nbr_philo)
-	{
-		pthread_join(data->philo[i].ph_thread, NULL);
-		i++;
-	}
+	return (0);
 }
+
 
 int	ft_init_philo(t_data *data)
 {
@@ -51,8 +34,9 @@ int	ft_init_philo(t_data *data)
 	i = 0;
 	while (i < data->nbr_philo)
 	{
-		data->philo[i].id = i + 1;
+		data->philo[i].id = i + 1 ;
 		data->philo[i].left_fork = i + 1;
+		data->philo[i].last_eat = 0;
 		i++;
 	}
 	return (0);
@@ -68,10 +52,15 @@ int	ft_init_data(t_data *data, char **av, int ac)
 		|| data->tt_sleep < 0)
 		put_error("Invalid Arguments\n");
 	if (ac == 6)
+	{
 		data->n_eat = ft_atoi(av[5]);
 			if (data->n_eat < 0)
 				put_error("Invalid Arguments\n");
+	}
 	ft_init_philo(data);
-	create_threads(data);
+	if (ft_init_mutex(data) == MUTEX_ERR)
+		return (1);
+	if (create_threads(data) == PHTREAD_ERR)
+		return (1);
 	return (0);
 }
