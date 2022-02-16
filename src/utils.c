@@ -6,7 +6,7 @@
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 12:21:43 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/11 12:35:49 by mbehhar          ###   ########.fr       */
+/*   Updated: 2022/02/16 18:31:04 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,14 @@ int	ft_atoi(const char *str)
 	}
 	res *= sign;
 	return (res);
+}
+
+void	print_state(t_data *data, int id, char *str)
+{
+	pthread_mutex_lock(&data->writing_mutex);
+	if (data->dieded == 0)
+	{
+		printf("%lld	%d	%s",(timestamp() - data->first_time), id, str);
+	}
+	pthread_mutex_unlock(&data->writing_mutex);
 }

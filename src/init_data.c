@@ -6,7 +6,7 @@
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 12:34:06 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/15 16:08:49 by mbehhar          ###   ########.fr       */
+/*   Updated: 2022/02/16 17:06:50 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ int	ft_init_philo(t_data *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->nbr_philo)
+	i = 1;
+	while (i <= data->nbr_philo)
 	{
-		data->philo[i].id = i + 1 ;
-		data->philo[i].left_fork = i + 1;
+		data->philo[i].id = i  ;
+		data->philo[i].left_fork = i ;
+		data->philo[i].right_fork = (i % data->nbr_philo ) + 1;
 		data->philo[i].last_eat = 0;
+		data->philo[i].data = data;
 		i++;
 	}
 	return (0);
@@ -48,6 +50,8 @@ int	ft_init_data(t_data *data, char **av, int ac)
 	data->tt_die = ft_atoi(av[2]);
 	data->tt_eat = ft_atoi(av[3]);
 	data->tt_sleep = ft_atoi(av[4]);
+	data->dieded = 0;
+	data->all_eat = 0;
 	if (data->nbr_philo < 0 || data->tt_die < 0 || data->tt_eat < 0
 		|| data->tt_sleep < 0)
 		put_error("Invalid Arguments\n");

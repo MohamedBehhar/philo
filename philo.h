@@ -6,7 +6,7 @@
 /*   By: mbehhar <mbehhar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 12:11:34 by mbehhar           #+#    #+#             */
-/*   Updated: 2022/02/15 16:25:32 by mbehhar          ###   ########.fr       */
+/*   Updated: 2022/02/16 18:46:16 by mbehhar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_philo
 {
 	int	id;
 	int	left_fork;
+	int right_fork;
 	pthread_t thread_id;
 	long long	last_eat;
 	struct s_data *data;
@@ -36,9 +37,13 @@ typedef struct s_data
 	int	tt_eat;
 	int	tt_sleep;
 	int	n_eat;
-	long long first_time;
+	int eating_counter;
 	int	dieded;
+	int	all_eat;
+	long long first_time;
 	pthread_mutex_t fork_mutex[210];
+	pthread_mutex_t writing_mutex;
+	pthread_mutex_t eating_mutex;
 	t_philo philo[210];
 }t_data;
 
@@ -46,10 +51,11 @@ typedef struct s_data
 void	put_error(char *str);
 
 // UTILS 
-int	ft_isdigit(int c);
-int	ft_isspace(int c);
-int	ft_strlen(const char *s);
-int	ft_atoi(const char *str);
+int		ft_isdigit(int c);
+int		ft_isspace(int c);
+int		ft_strlen(const char *s);
+int		ft_atoi(const char *str);
+void	print_state(t_data *data, int id, char *str);
 
 // TIME 
 long long	timestamp(void);
